@@ -1,10 +1,18 @@
 import React, { Component } from 'react'
 import './login.css'
-import Logo from './images/logo.png'
-import { Form, Input, Button } from 'antd';
+import Logo from '../../assets/images/logo.png'
+import { Form, Input, Button, message } from 'antd';
+import {reqLogin} from '../../api'
+import memoryUtils from '../../utils/memoryUtils'
+import storageUtils from '../../utils/storageUtiles'
+import { Redirect } from 'react-router-dom'
 
 export default class Login extends Component {
     render() {
+        const user = memoryUtils.user
+        if(user&&user._id) {
+            return <Redirect to='admin'></Redirect>
+        }
         const layout = {
             labelCol: {
               span: 8,
@@ -19,8 +27,19 @@ export default class Login extends Component {
               span: 16,
             },
           };
-          const onFinish = (values) => {
-            console.log('Success:', values);
+          const onFinish = async(values) => {
+            const {username, password} = values
+            const result = await reqLogin(username, password)
+            console.log('请求成功',result)
+            if(result.status === 0) {
+                const user = result.data
+                memoryUtils.user = user
+                storageUtils.saveUser(user)
+                message.success('登录成功')
+                this.props.history.replace('/')
+            } else {
+                message.error(result.msg)
+            }
           };
         
           const onFinishFailed = (errorInfo) => {
@@ -50,7 +69,10 @@ export default class Login extends Component {
                         {
                             required: true,
                             message: '请输入用户名!',
-                        },
+                        }, {
+                            min: 4,
+                            message: '用户名最少4位！'
+                        }
                         ]}
                     >
                         <Input />
@@ -63,7 +85,10 @@ export default class Login extends Component {
                         {
                             required: true,
                             message: '请输入密码!',
-                        },
+                        }, {
+                            min: 5,
+                            message: '密码最少5位！'
+                        }
                         ]}
                     >
                         <Input.Password />
