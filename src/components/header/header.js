@@ -5,7 +5,7 @@ import {formatDate} from '../../utils/dateUtils'
 import Name from '../../utils/memoryUtils'
 import {withRouter} from 'react-router-dom'
 import menuList from '../../config/menuConfig'
-import { Modal, Button, Space } from 'antd';
+import { Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import memoryUtils from '../../utils/memoryUtils'
 import storageUtils from '../../utils/storageUtiles'
