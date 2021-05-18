@@ -3,7 +3,6 @@ import {
   Card,
   Table,
   Button,
-  Icon,
   message,
   Modal
 } from 'antd'
@@ -235,14 +234,12 @@ export default class Category extends Component {
     const title = parentId === '0' ? '一级分类列表' : (
       <span>
         <LinkButton onClick={this.showCategorys}>一级分类列表</LinkButton>
-        <Icon type='arrow-right' style={{marginRight: 5}}/>
         <span>{parentName}</span>
       </span>
     )
     // Card的右侧
     const extra = (
       <Button type='primary' onClick={this.showAdd}>
-        <Icon type='plus'/>
         添加
       </Button>
     )

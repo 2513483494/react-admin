@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Link, withRouter} from 'react-router-dom'
-import {Menu, Icon} from 'antd';
+import {Menu} from 'antd';
 
 import logo from '../../assets/images/logo.png'
 import menuList from '../../config/menuConfig'
@@ -85,7 +85,6 @@ class LeftNav extends Component {
           pre.push((
             <Menu.Item key={item.key}>
               <Link to={item.key}>
-                <Icon type={item.icon}/>
                 <span>{item.title}</span>
               </Link>
             </Menu.Item>
@@ -106,7 +105,6 @@ class LeftNav extends Component {
               key={item.key}
               title={
                 <span>
-              <Icon type={item.icon}/>
               <span>{item.title}</span>
             </span>
               }
