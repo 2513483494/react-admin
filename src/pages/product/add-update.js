@@ -1,14 +1,15 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import {
-    Card, Form, Input, Cascader, Upload, message, Modal, Button, InputNumber
+    Card, Form, Input, Cascader, Upload, Modal, Button
 } from 'antd'
 import {
     ArrowLeftOutlined,
     PlusOutlined
 } from '@ant-design/icons';
 import LinkButton from '../../components/link-button';
-import { reqCategorys, reqCategory } from '../../api'
-import RichTextEdit from './rich-text-edit'
+import { reqCategorys } from '../../api'
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const Item = Form.Item
 const { TextArea } = Input;
@@ -36,8 +37,10 @@ export default class Addupdate extends Component {
         previewTitle: '',
         fileList: [],
         options: [],
-
+        value: ''
     };
+
+    onChangee = editorState => this.setState({ editorState });
     handleCancel = () => this.setState({ previewVisible: false });
     handlePreview = async file => {
         if (!file.url && !file.preview) {
@@ -51,10 +54,7 @@ export default class Addupdate extends Component {
         });
     };
     handleChange = ({ file, fileList }) => {
-        console.log('handleChange',file.status,file)
-        if(file.status==='done'){
-            const result = file.response
-        }
+        console.log('handleChange', file.status, file)
         this.setState({ fileList })
     }
 
@@ -89,6 +89,7 @@ export default class Addupdate extends Component {
 
     async componentDidMount() {
         this.getCategorys('0')
+
     }
     render() {
         const { previewVisible, previewImage, fileList, previewTitle } = this.state;
@@ -108,8 +109,7 @@ export default class Addupdate extends Component {
                 </LinkButton>
             </span>
         )
-        function onChange(value) {
-        }
+
         const onFinish = (values) => {
         };
 
@@ -165,7 +165,6 @@ export default class Addupdate extends Component {
                         <Cascader
                             defaultValue={['电器', '冰箱', '海尔冰箱']}
                             options={this.state.options}
-                            onChange={onChange}
                         />
                     </Item>
                     <Item label='商品图片'>
@@ -188,8 +187,8 @@ export default class Addupdate extends Component {
                             <img alt="example" style={{ width: '100%' }} src={previewImage} />
                         </Modal>
                     </Item>
-                    <Item label='商品详情' labelCol={{span:2}} wrapperCol={{span: 18}}>
-                        <RichTextEdit/>
+                    <Item label='商品详情' labelCol={{ span: 2 }} wrapperCol={{ span: 18 }}>
+                        <ReactQuill theme="snow" value={this.value}  />
                     </Item>
                     <Item >
                         <Button type='primary' htmlType="submit">提交</Button>
