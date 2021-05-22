@@ -28,8 +28,8 @@ export default class Admin extends Component {
                         <Switch>
                             <Redirect from='/' exact to='/home' />
                             <Route path='/home' component={Home} />
-                            <Route path='/category' component={Category} />
-                            <Route path='/manage' component={Manage} />
+                            <Route exact path='/products/category' component={Category} />
+                            <Route exact path='/products/manage' component={Manage} />
                             <Route path='/user' component={User} />
                             <Route path='/role' component={Role} />
                             <Route path="/charts/bar" component={Bar} />

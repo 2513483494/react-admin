@@ -1,6 +1,6 @@
 .main{
     height: 80px;
-    background-color: rgb(245, 239, 239);
+    background-color: white;
     .top{
         height: 40px;
         border-bottom: 1px solid black;
@@ -19,6 +19,20 @@
             line-height: 40px;
             margin-right: 30px;
         }
-        
+        .title{
+            font-size: 25px;
+            margin-left: 50px;
+            &::after{
+                content: "";
+                border-left: 20px solid transparent;
+                border-right: 20px solid transparent;
+                border-bottom: 20px solid transparent;
+                border-top: 20px solid white;
+                position: relative;
+                top: 50px;
+                right: 45px;
+            }
+            
+        }
     }
 }

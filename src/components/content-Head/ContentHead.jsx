@@ -11,12 +11,16 @@ class ContentHead extends Component {
     getTime=()=>{
         this.id = setInterval(() => {
             const currtime = formatTime(Date.now())
-            this.setState({currtime},console.log(this.state.currtime))
+            this.setState({currtime})
         }, 1000);
+    }
+    logout=()=>{
+        this.props.history.push('/login')
     }
     componentDidMount(){
         this.getTime()
     }
+    
     componentWillUnmount(){
         clearInterval(this.id)
     }
@@ -31,6 +35,7 @@ class ContentHead extends Component {
                     </div>
                 </div>
                 <div className='bottom'>
+                    <span className='title'>首页</span>
                     <div className='bottomcontent'>
                         <span>{currtime}</span>
                     </div>

@@ -22,7 +22,6 @@ const tailLayout = {
 export default class Login extends Component {
     onFinish = async(values) => {
         const result = await reqLogin(values.username,values.password)
-        console.log(result)
         if(result.status===0){
             this.props.history.push('/admin')
         }
