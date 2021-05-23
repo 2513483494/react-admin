@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, Table, Button } from 'antd'
+import { Card, Table, Button, Modal, Form, Input } from 'antd'
 import LinkButton from '../../components/linkButton/LinkButton'
 import {
     PlusOutlined,
@@ -12,7 +12,8 @@ export default class Category extends Component {
     state = {
         dataSource: [],
         parentId: 0,
-        parentName: ''
+        parentName: '',
+        visible: false
     }
     getCategory = async () => {
         const id = this.state.parentId
@@ -48,13 +49,37 @@ export default class Category extends Component {
                 width: 300,
                 render: (category) => (
                     <span>
-                        <LinkButton>修改分类</LinkButton>
+                        <LinkButton onClick={this.updateCategory}>修改分类</LinkButton>
                         {this.state.parentId === 0 ? <LinkButton onClick={() => this.showSubcat(category)}>查看子分类</LinkButton> : null}
                     </span>
                 )
             }
         ]
     }
+    showModal = () => {
+        this.setState({ visible: true })
+    }
+
+    handleOk = () => {
+        this.setState({ visible: true })
+    }
+
+    handleCancel = () => {
+        this.setState({ visible: false })
+    }
+    addCategory = () => {
+        this.showModal()
+    }
+    updateCategory = () => {
+        this.showModal()
+    }
+    onFinish = (values) => {
+        console.log('Success:', values);
+      };
+    
+    onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+      };
     componentWillMount() {
         this.initColumns()
     }
@@ -63,20 +88,27 @@ export default class Category extends Component {
     }
 
     render() {
-        const { dataSource, parentId, parentName } = this.state
+        const { dataSource, parentId, parentName, visible } = this.state
         const title = (
             <div>
                 <span className='arrow'>
                     {parentId === 0 ? null : <LinkButton onClick={this.showCategory}><ArrowLeftOutlined /></LinkButton>}
                     {parentId === 0 ? <span>一级分类列表</span> : <span>{parentName}</span>}
                 </span>
-                <Button type='primary' className='addbutton'>
+                <Button type='primary' className='addbutton' onClick={this.addCategory}>
                     <PlusOutlined />
                     <span>添加</span>
                 </Button>
             </div>
         )
-
+        const layout = {
+            labelCol: {
+              span: 8,
+            },
+            wrapperCol: {
+              span: 16,
+            },
+          };
 
         return (
             <Card title={title}>
@@ -85,7 +117,32 @@ export default class Category extends Component {
                     columns={this.columns}
                     bordered
                     rowKey='_id' />
+                <Modal title="添加分类" visible={visible} onOk={this.handleOk} onCancel={this.handleCancel}>
+                    <Form
+                        {...layout}
+                        name="basic"
+                        initialValues={{
+                            remember: true,
+                        }}
+                        onFinish={this.onFinish}
+                        onFinishFailed={this.onFinishFailed}
+                    >
+                        <Form.Item
+                            label="分类名称"
+                            name="username"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: '请输入分类名称!',
+                                },
+                            ]}
+                        >
+                            <Input />
+                        </Form.Item>
+                    </Form>
+                </Modal>
             </Card>
+
         )
     }
 }
