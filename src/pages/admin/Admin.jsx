@@ -12,6 +12,7 @@ import Pie from '../pie/Pie'
 import LeftNav from './leftNav/LeftNav'
 import NotFound from '../notFound/NotFound'
 import ContentHead from '../../components/content-Head/ContentHead'
+import Update from '../update/Update'
 
 const { Footer, Sider, Content } = Layout
 
@@ -30,6 +31,7 @@ export default class Admin extends Component {
                             <Route path='/home' component={Home} />
                             <Route exact path='/products/category' component={Category} />
                             <Route exact path='/products/manage' component={Manage} />
+                            <Route exact path='/products/update' component={Update} />
                             <Route path='/user' component={User} />
                             <Route path='/role' component={Role} />
                             <Route path="/charts/bar" component={Bar} />

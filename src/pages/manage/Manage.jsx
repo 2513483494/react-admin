@@ -3,11 +3,11 @@ import { Dropdown, Button, Menu, Input, Table, message, Modal, Form, Upload } fr
 import { DownOutlined, UserOutlined, PlusOutlined } from '@ant-design/icons';
 import './index.less'
 import LinkButton from '../../components/linkButton/LinkButton'
-import { reqAddOrUpdateProduct, reqProducts, reqUpdateStatus } from '../../api/index'
+import { reqProducts, reqUpdateStatus, reqSearchProducts } from '../../api/index'
 
 const { Search } = Input;
 
-function Manage() {
+function Manage(props) {
     const [searchTitle, setSearchTitle] = useState('按名称搜索')
     const [dataSource, setDataSource] = useState([{}])
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -15,28 +15,29 @@ function Manage() {
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
     const [fileList, setFileList] = useState([]);
-    const [currProduct, setCurrProduct] = useState({});
-
-
-
+    const [total, setTotal] = useState(0);
+    const [pageNum, setPageNUm] = useState(1);
+    const [searchType, setSearchType] = useState('productName');
+    const [searchName, setSearchName] = useState('');
 
     const showModal = () => {
         setIsModalVisible(true);
-        setCurrProduct({})
-    };
+    }
 
     const handleOk = () => {
-        setIsModalVisible(false);
-    };
+        setIsModalVisible(false)
+    }
 
     const handleCancel = () => {
-        setIsModalVisible(false);
-    };
+        setIsModalVisible(false)
+    }
     function handleMenuClick(e) {
         if (e.key === '1') {
             setSearchTitle('按名称搜索')
+            setSearchType('productName')
         } else {
             setSearchTitle('按描述搜索')
+            setSearchType('productDesc')
         }
     }
     function getBase64(file) {
@@ -59,7 +60,7 @@ function Manage() {
         setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1))
     };
 
-    const handleChange = ({ fileList }) => setFileList({fileList})
+    const handleChange = ({ fileList }) => setFileList({ fileList })
     const menu = (
         <Menu onClick={handleMenuClick}>
             <Menu.Item key="1" icon={<UserOutlined />}>
@@ -70,7 +71,10 @@ function Manage() {
             </Menu.Item>
         </Menu>
     )
-    const onSearch = value => console.log(value)
+    const onSearch = async (value) => {
+        console.log(value)
+        setSearchName(value)
+    }
 
     const columns = [
         {
@@ -113,20 +117,31 @@ function Manage() {
         },
         {
             title: '操作',
-            render: (product) => (
-                <div>
-                    <LinkButton onClick={()=>{
-                        console.log('product',product)
-                        setCurrProduct(product)
-                        setIsModalVisible(true)
-                    }}>详情(修改)</LinkButton>
-                </div>
-            )
+            render: (product) => {
+                return (
+                    <span>
+                        {/*将product对象使用state传递给目标路由组件*/}
+                        <LinkButton onClick={() => props.history.push(
+                            {
+                                pathname: '/products/update',
+                                state: { ...product }
+                            }
+                        )}>详情(修改)</LinkButton>
+                    </span >
+                )
+            }
         },
     ]
     const getProducts = async () => {
-        const result = await reqProducts(1, 6)
-        setDataSource(result.data.list)
+        let result
+        if(searchName){
+            result = await reqSearchProducts({ pageNum, pageSize: 5, searchName, searchType })
+        }else{
+            result = await reqProducts(pageNum, 5)
+        } 
+        const { total, list } = result.data
+        setTotal(total)
+        setDataSource(list)
     }
     useEffect(() => {
         getProducts()
@@ -167,14 +182,27 @@ function Manage() {
                 <Table
                     dataSource={dataSource}
                     columns={columns}
-                    bordered />
+                    bordered
+                    pagination={{
+                        current: pageNum,
+                        total: total,
+                        defaultPageSize: 5,
+                        showQuickJumper: true,
+                        onChange: (pageNum) => {
+                            console.log('p', pageNum)
+                            setPageNUm(pageNum)
+                            getProducts(pageNum)
+                        }
+                    }}
+                />
+
             </div>
             <Modal title={title} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
                 <Form
-                    initialValues={{ 
-                        username: currProduct._id?currProduct.name:'' ,
-                        desc:currProduct._id?currProduct.desc:'' ,
-                        price:currProduct._id?currProduct.price:'' ,
+                    initialValues={{
+                        username: '',
+                        desc: '',
+                        price: '',
                     }}>
                     <Form.Item
                         label="商品名称"
