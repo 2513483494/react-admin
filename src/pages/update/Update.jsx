@@ -4,7 +4,7 @@ import { reqAddOrUpdateProduct } from '../../api/index'
 import LinkButton from '../../components/linkButton/LinkButton'
 import {
     ArrowLeftOutlined
-} from '@ant-design/icons';
+} from '@ant-design/icons'
 
 function Update(props) {
     const {
@@ -36,7 +36,7 @@ function Update(props) {
     }
 
     const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
+        console.log('Failed:', errorInfo)
     }
     return (
         <div style={{ width: 500, height: 500, margin: '10px auto' }}>

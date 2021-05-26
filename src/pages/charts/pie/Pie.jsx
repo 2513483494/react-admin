@@ -1,5 +1,5 @@
-import React from "react";
-import $ from "jquery";
+import React from "react"
+import $ from "jquery"
 import {
 	Chart,
 	Coord,
@@ -7,28 +7,28 @@ import {
 	Geom,
 	Legend,
 	View,
-} from "bizcharts";
-import DataSet from "@antv/data-set";
-import * as turf from "@turf/turf";
+} from "bizcharts"
+import DataSet from "@antv/data-set"
+import * as turf from "@turf/turf"
 
 // 显示九段线且无交互版：https://codesandbox.io/s/blissful-bird-1i1y5?file=/src/App.js
 
 function keepMapRatio(mapData, c, type) {
 	if (mapData && turf) {
 		// 获取数据外接矩形，计算宽高比
-		const bbox = turf.bbox(mapData);
-		const width = bbox[2] - bbox[0];
-		const height = bbox[3] - bbox[1];
-		const ratio = height / width;
+		const bbox = turf.bbox(mapData)
+		const width = bbox[2] - bbox[0]
+		const height = bbox[3] - bbox[1]
+		const ratio = height / width
 
-		const cWidth = c.width;
-		const cHeight = c.height;
-		const cRatio = cHeight / cWidth;
+		const cWidth = c.width
+		const cHeight = c.height
+		const cRatio = cHeight / cWidth
 
-		let scale = {};
+		let scale = {}
 
 		if (cRatio >= ratio) {
-			const halfDisRatio = (cRatio - ratio) / 2 / cRatio;
+			const halfDisRatio = (cRatio - ratio) / 2 / cRatio
 			scale = {
 				x: {
 					range: [0, 1],
@@ -36,9 +36,9 @@ function keepMapRatio(mapData, c, type) {
 				y: {
 					range: [halfDisRatio, 1 - halfDisRatio],
 				},
-			};
+			}
 		} else {
-			const halfDisRatio = ((1 / cRatio - 1 / ratio) / 2) * cRatio;
+			const halfDisRatio = ((1 / cRatio - 1 / ratio) / 2) * cRatio
 			scale = {
 				y: {
 					range: [0, 1],
@@ -46,11 +46,11 @@ function keepMapRatio(mapData, c, type) {
 				x: {
 					range: [halfDisRatio, 1 - halfDisRatio],
 				},
-			};
+			}
 		}
-		const curScaleXRange = c.getScaleByField('x').range;
-		const curScaleYRange = c.getScaleByField('y').range;
-		console.log(curScaleYRange, scale.y.range);
+		const curScaleXRange = c.getScaleByField('x').range
+		const curScaleYRange = c.getScaleByField('y').range
+		console.log(curScaleYRange, scale.y.range)
 		debugger
 		if (
 			curScaleXRange[0] !== scale.x.range[0] ||
@@ -59,23 +59,23 @@ function keepMapRatio(mapData, c, type) {
 			curScaleYRange[1] !== scale.y.range[1]
 		) {
 			setTimeout(() => {
-				c.scale(scale);
-				c.render(true);
-			}, 1);
+				c.scale(scale)
+				c.render(true)
+			}, 1)
 		}
 	}
 }
 
 class Pie extends React.Component {
 	constructor(props) {
-		super(props);
+		super(props)
 		this.state = {
 			mapData: undefined,
-		};
+		}
 	}
 	componentDidMount() {
 		const dataUrl =
-			"https://gw.alipayobjects.com/os/bmw-prod/d4652bc5-e971-4bca-a48c-5d8ad10b3d91.json";
+			"https://gw.alipayobjects.com/os/bmw-prod/d4652bc5-e971-4bca-a48c-5d8ad10b3d91.json"
 		$.ajax({
 			url: dataUrl,
 			success: (d) => {
@@ -88,26 +88,21 @@ class Pie extends React.Component {
 								...v.properties,
 								size: Math.floor(Math.random() * 300),
 							},
-						};
-					});
-				const res = { ...d, features: feas };
-				this.setState({ mapData: res });
+						}
+					})
+				const res = { ...d, features: feas }
+				this.setState({ mapData: res })
 			},
-		});
+		})
 	}
 
 	render() {
-		const { mapData } = this.state;
-		const colors = "#075A84,#3978A4,#6497C0,#91B6D7,#C0D6EA,#F2F7F8"
-			.split(",")
-			.reverse();
+		const { mapData } = this.state
 
-		let bgView;
-		let interval;
-		let min = 0;
+		let bgView
 		if (mapData) {
 			// data set
-			const ds = new DataSet();
+			const ds = new DataSet()
 
 			// draw the map
 			const dv = ds
@@ -119,21 +114,17 @@ class Pie extends React.Component {
 					type: "geo.projection",
 					projection: "geoMercator",
 					as: ["x", "y", "centroidX", "centroidY"],
-				});
+				})
 
-			bgView = new DataSet.View().source(dv.rows);
-			const sizes = bgView.rows.map((r) => Number(r.properties.size));
+			bgView = new DataSet.View().source(dv.rows)
 
-			const min = Math.min(...sizes);
-			const max = Math.max(...sizes);
 
-			interval = (max - min) / colors.length;
 		}
 
 		const scale = {
 			x: { sync: true },
 			y: { sync: true },
-		};
+		}
 
 		const centerData = bgView
 			? bgView.rows.map((p) => {
@@ -142,9 +133,9 @@ class Pie extends React.Component {
 					y: p.centroidY,
 					name: p.nam,
 					size: p.properties.size,
-				};
+				}
 			})
-			: [];
+			: []
 
 		return (
 			<div style={{ width: "100%" }}>
@@ -160,7 +151,7 @@ class Pie extends React.Component {
 						placeholder={<div>Loading</div>}
 						padding="20"
 						onAfterRender={(e, c) => {
-							keepMapRatio(this.state.mapData, c, "rerender");
+							keepMapRatio(this.state.mapData, c, "rerender")
 						}}
 					>
 						<Coord reflect="y" />
@@ -182,7 +173,7 @@ class Pie extends React.Component {
 								// 			name: "Size",
 								// 			title: t,
 								// 			value: p.size,
-								// 		};
+								// 		}
 								// 	},
 								// ]}
 								tooltip={false}
@@ -201,7 +192,7 @@ class Pie extends React.Component {
 					</Chart>
 				}
 			</div>
-		);
+		)
 	}
 }
 // CDN END

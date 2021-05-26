@@ -6,7 +6,7 @@ import { Menu } from 'antd'
 import { Link, withRouter } from 'react-router-dom'
 //配置生成菜单
 
-const SubMenu = Menu.SubMenu;
+const SubMenu = Menu.SubMenu
 
 class LeftNav extends Component {
     getMenuNodes = (menuList) => {

@@ -15,7 +15,7 @@ class ContentHead extends Component {
         this.id = setInterval(() => {
             const currtime = formatTime(Date.now())
             this.setState({ currtime })
-        }, 1000);
+        }, 1000)
     }
     logout = () => {
         //需要清除登录信息，避免下次不用登录就可以访问，不过有没有这种需求有待考虑

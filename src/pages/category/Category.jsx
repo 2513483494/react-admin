@@ -4,7 +4,7 @@ import LinkButton from '../../components/linkButton/LinkButton'
 import {
     PlusOutlined,
     ArrowLeftOutlined
-} from '@ant-design/icons';
+} from '@ant-design/icons'
 import './index.less'
 import { reqCategorys, reqAddCategory, reqUpdateCategory } from '../../api/index'
 
@@ -101,12 +101,12 @@ export default class Category extends Component {
           }))
     }
     onFinish = (values) => {
-        console.log('Success:', values);
-    };
+        console.log('Success:', values)
+    }
 
     onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
+        console.log('Failed:', errorInfo)
+    }
     handleChange = (e) => {
         const categoryName = e.target.value
         this.setState({
@@ -141,7 +141,7 @@ export default class Category extends Component {
             wrapperCol: {
                 span: 16,
             },
-        };
+        }
 
         return (
             <Card title={title}>

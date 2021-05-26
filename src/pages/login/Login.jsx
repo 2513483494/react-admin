@@ -12,13 +12,13 @@ const layout = {
     wrapperCol: {
         span: 16,
     },
-};
+}
 const tailLayout = {
     wrapperCol: {
         offset: 8,
         span: 16,
     },
-};
+}
 
 export default class Login extends Component {
     onFinish = async(values) => {
@@ -31,11 +31,17 @@ export default class Login extends Component {
         }else{
             message.warning('用户名或密码错误，请重新登录！')
         }
-    };
+    }
 
     onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
+        console.log('Failed:', errorInfo)
+    }
+
+    componentWillMount(){
+        if(store.get('userName')) {
+            this.props.history.push('/home')
+        }
+    }
     render() {
         return (
             <div className='login-body'>

@@ -1,12 +1,12 @@
 //用bizcharts好用一些
-import React, { useState, useEffect } from "react";
-import { Chart, Point, Line, Annotation } from "bizcharts";
+import React, { useState, useEffect } from "react"
+import { Chart, Point, Line, Annotation } from "bizcharts"
 
 const scale = {
 	rate: {
 		nice: true,
 	},
-};
+}
 const dataMarkerCfg1 = {
 	position: ["2014-01-03", 6.763],
 	text: {
@@ -15,7 +15,7 @@ const dataMarkerCfg1 = {
 			textAlign: "left",
 		},
 	},
-};
+}
 
 const dataMarkerCfg2 = {
 	position: ["2013-05-31", 2.093],
@@ -25,7 +25,7 @@ const dataMarkerCfg2 = {
 			textAlign: "left",
 		},
 	},
-};
+}
 
 const dataMarkerCfg3 = {
 	position: ["2016-09-04", 2.321],
@@ -39,7 +39,7 @@ const dataMarkerCfg3 = {
 	line: {
 		length: 30,
 	},
-};
+}
 // style文档 https://bizcharts.net/product/BizCharts4/category/61/page/114
 const dataMarkerCfg4 = {
 	position: ["2016-11-02", 2.399],
@@ -52,7 +52,7 @@ const dataMarkerCfg4 = {
 			fill: "red",
 		},
 	},
-	// line?: null | { style?: ShapeAttrs; length?: number };
+	// line?: null | { style?: ShapeAttrs length?: number }
 	//线条style配置
 	line: {
 		length: 180,
@@ -60,14 +60,14 @@ const dataMarkerCfg4 = {
 			stroke: "red",
 		},
 	},
-};
+}
 const dataMarkerCfg5 = {
 	position: ["2017-03-24", 3.83],
 	text: null,
 	line: {
 		length: 50,
 	},
-};
+}
 const dataRegionCfg = {
 	start: ["2016-12-02", 2.517],
 	end: ["2017-03-24", 3.83],
@@ -75,17 +75,17 @@ const dataRegionCfg = {
 		content: "【关键区间】",
 	},
 	lineLength: 50,
-};
+}
 function LineChart() {
-	const [data, setData] = useState();
+	const [data, setData] = useState()
 	useEffect(() => {
 		fetch("https://gw.alipayobjects.com/os/antvdemo/assets/data/income.json")
 			.then((res) => res.json())
 			.then((data) => {
-				console.log(data);
-				setData(data);
-			});
-	}, []);
+				console.log(data)
+				setData(data)
+			})
+	}, [])
 
 	return (
 		<Chart height={400} data={data} autoFit scale={scale}>
@@ -106,7 +106,7 @@ function LineChart() {
 			<Annotation.DataMarker {...dataMarkerCfg5} />
 			<Annotation.DataRegion {...dataRegionCfg} />
 		</Chart>
-	);
+	)
 }
 
 export default LineChart

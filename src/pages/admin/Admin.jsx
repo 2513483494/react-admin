@@ -6,9 +6,9 @@ import Category from '../category/Category'
 import Manage from '../manage/Manage'
 import User from '../user/User'
 import Role from '../role/Role'
-import Bar from '../bar/Bar'
-import Line from '../line/LineChart'
-import Pie from '../pie/Pie'
+import Bar from '../charts/bar/Bar'
+import Line from '../charts/line/LineChart'
+import Pie from '../charts/pie/Pie'
 import LeftNav from './leftNav/LeftNav'
 import NotFound from '../notFound/NotFound'
 import ContentHead from '../../components/content-Head/ContentHead'
@@ -18,7 +18,8 @@ import Update from '../update/Update'
 const { Footer, Sider, Content } = Layout
 
 export default class Admin extends Component {
-    render() {
+    
+    render() {        
         return (
             <Layout style={{ minHeight: '100%' }}>
                 <Sider>
@@ -28,7 +29,7 @@ export default class Admin extends Component {
                     <ContentHead/>
                     <Content style={{ margin: 20, backgroundColor: '#fff' }}>
                         <Switch>
-                            <Redirect from='/' exact to='/home' />
+                            <Redirect from='/' exact to='/login' />
                             <Route path='/home' component={Home} />
                             <Route exact path='/products/category' component={Category} />
                             <Route exact path='/products/manage' component={Manage} />

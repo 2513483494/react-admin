@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import { Dropdown, Button, Menu, Input, Table, message, Modal, Form, Upload } from 'antd'
-import { DownOutlined, UserOutlined, PlusOutlined } from '@ant-design/icons';
+import { DownOutlined, UserOutlined, PlusOutlined } from '@ant-design/icons'
 import './index.less'
 import LinkButton from '../../components/linkButton/LinkButton'
 import { reqProducts, reqUpdateStatus, reqSearchProducts } from '../../api/index'
 //开始用函数组件,利用hooks状态管理
 
-const { Search } = Input;
+const { Search } = Input
 
 function Manage(props) {
     const [searchTitle, setSearchTitle] = useState('按名称搜索')
     const [dataSource, setDataSource] = useState([{}])
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [previewVisible, setPreviewVisible] = useState(false);
-    const [previewImage, setPreviewImage] = useState('');
-    const [previewTitle, setPreviewTitle] = useState('');
-    const [fileList, setFileList] = useState([]);
-    const [total, setTotal] = useState(0);
-    const [pageNum, setPageNUm] = useState(1);
-    const [searchType, setSearchType] = useState('productName');
-    const [searchName, setSearchName] = useState('');
+    const [isModalVisible, setIsModalVisible] = useState(false)
+    const [previewVisible, setPreviewVisible] = useState(false)
+    const [previewImage, setPreviewImage] = useState('')
+    const [previewTitle, setPreviewTitle] = useState('')
+    const [fileList, setFileList] = useState([])
+    const [total, setTotal] = useState(0)
+    const [pageNum, setPageNUm] = useState(1)
+    const [searchType, setSearchType] = useState('productName')
+    const [searchName, setSearchName] = useState('')
 
     const showModal = () => {
-        setIsModalVisible(true);
+        setIsModalVisible(true)
     }
 
     const handleOk = () => {
@@ -43,23 +43,23 @@ function Manage(props) {
     }
     function getBase64(file) {
         return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
-        });
+            const reader = new FileReader()
+            reader.readAsDataURL(file)
+            reader.onload = () => resolve(reader.result)
+            reader.onerror = error => reject(error)
+        })
     }
     const handleCancelimg = () => setPreviewVisible(false)
 
     const handlePreview = async file => {
         if (!file.url && !file.preview) {
-            file.preview = await getBase64(file.originFileObj);
+            file.preview = await getBase64(file.originFileObj)
         }
 
         setPreviewVisible(file.url || file.preview)
         setPreviewImage(true)
         setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1))
-    };
+    }
 
     const handleChange = ({ fileList }) => setFileList({ fileList })
     const menu = (

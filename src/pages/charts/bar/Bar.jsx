@@ -1,10 +1,9 @@
-import React from "react";
+import React from "react"
 import {
-  G2,
   Chart,
   Tooltip,
   Interval,
-} from "bizcharts";
+} from "bizcharts"
 
 const data = [
   { name: 'London', 月份: 'Jan.', 月均降雨量: 18.9 },
@@ -23,7 +22,7 @@ const data = [
   { name: 'Berlin', 月份: 'Jun.', 月均降雨量: 35.5 },
   { name: 'Berlin', 月份: 'Jul.', 月均降雨量: 37.4 },
   { name: 'Berlin', 月份: 'Aug.', 月均降雨量: 42.4 },
-];
+]
 
 function Bar() {
   return (
@@ -40,7 +39,7 @@ function Bar() {
       />
       <Tooltip shared />
     </Chart>
-  );
+  )
 }
 
 export default Bar

@@ -1,11 +1,9 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export default class Role extends Component {
-    render() {
-        return (
-            <div>
-                role
-            </div>
-        )
-    }
+function Role() {
+    return (
+        <div>role</div>
+    )
 }
+
+export default Role
