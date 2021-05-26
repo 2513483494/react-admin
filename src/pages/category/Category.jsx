@@ -18,6 +18,7 @@ export default class Category extends Component {
         addOrUpdate: '',
         categoryId: ''
     }
+    formRef = React.createRef()
     getCategory = async () => {
         const id = this.state.parentId
         const result = await reqCategorys(id)
@@ -81,16 +82,22 @@ export default class Category extends Component {
     handleCancel = () => {
         this.setState({ visible: false })
     }
+    //添加品类
     addCategory = () => {
         this.showModal()
         this.setState({ addOrUpdate: 'add' })
-        this.setState({ categoryName: '' },() => this.refs.form.resetFields())
+        this.setState({ categoryName: '' },() => this.formRef.current.setFieldsValue({
+            username: this.state.categoryName,
+          }))
     }
+    //修改品类信息
     updateCategory = async (category) => {
         this.showModal()
         this.setState({ addOrUpdate: 'update' })
         this.setState({ categoryId: category._id })
-        this.setState({ categoryName: category.name },() => this.refs.form.resetFields())
+        this.setState({ categoryName: category.name },() => this.formRef.current.setFieldsValue({
+            username: this.state.categoryName,
+          }))
     }
     onFinish = (values) => {
         console.log('Success:', values);
@@ -151,7 +158,7 @@ export default class Category extends Component {
                             remember: true,
                             username: this.state.categoryName
                         }}
-                        ref='form'
+                        ref={this.formRef}
                         onFinish={this.onFinish}
                         onFinishFailed={this.onFinishFailed}
                     >
