@@ -7,8 +7,6 @@ import {
 } from '@ant-design/icons';
 import './index.less'
 import { reqCategorys, reqAddCategory } from '../../api/index'
-import store from 'store'
-import pathName from '../../config/pathName'
 
 export default class Category extends Component {
     state = {
@@ -100,7 +98,6 @@ export default class Category extends Component {
     }
     componentDidMount() {
         this.getCategory()
-        store.set('globalTitle',pathName[this.props.location.pathname])
     }
 
     render() {

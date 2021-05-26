@@ -4,31 +4,31 @@ import LinkButton from '../linkButton/LinkButton'
 import { withRouter } from 'react-router-dom'
 import formatTime from '../../utils/formatTime'
 import store from 'store'
+import pathName from '../../config/pathName'
 
 class ContentHead extends Component {
-    state={
-        currtime:formatTime(Date.now()),
-        title:''
+    state = {
+        currtime: formatTime(Date.now())
     }
-    getTime=()=>{
+    getTime = () => {
         this.id = setInterval(() => {
             const currtime = formatTime(Date.now())
-            this.setState({currtime})
+            this.setState({ currtime })
         }, 1000);
     }
-    logout=()=>{
+    logout = () => {
         this.props.history.push('/login')
     }
-
-    componentDidMount(){
+    componentDidMount() {
         this.getTime()
     }
-    
-    componentWillUnmount(){
+
+    componentWillUnmount() {
         clearInterval(this.id)
     }
     render() {
-        const {currtime}=this.state
+        const { currtime } = this.state
+        const title = pathName[this.props.location.pathname]
         return (
             <div className='main'>
                 <div className='top'>
@@ -38,14 +38,14 @@ class ContentHead extends Component {
                     </div>
                 </div>
                 <div className='bottom'>
-                    <span className='title'>{store.get('globalTitle')}</span>
+                    <span className='title'>{title}</span>
                     <div className='bottomcontent'>
                         <span>{currtime}</span>
                     </div>
                 </div>
             </div>
         )
-    } 
+    }
 }
 
 export default withRouter(ContentHead)

@@ -7,7 +7,9 @@ import {
 } from '@ant-design/icons';
 
 function Update(props) {
-    const { name, desc, price, pCategoryId, categoryId, imgs, detail, _id } = props.location.state
+    const {
+        name, desc, price, pCategoryId, categoryId, imgs, detail, _id
+    } = props.location.state
     const onFinish = async (values) => {
         console.log('Success:', values)
         const newProduct = {

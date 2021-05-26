@@ -4,8 +4,6 @@ import { DownOutlined, UserOutlined, PlusOutlined } from '@ant-design/icons';
 import './index.less'
 import LinkButton from '../../components/linkButton/LinkButton'
 import { reqProducts, reqUpdateStatus, reqSearchProducts } from '../../api/index'
-import pathName from '../../config/pathName'
-import store from 'store'
 
 const { Search } = Input;
 
@@ -147,7 +145,6 @@ function Manage(props) {
     }
     useEffect(() => {
         getProducts()
-        store.set('globalTitle',pathName[props.location.pathname])
     })
     const title = (
         <span>添加商品</span>

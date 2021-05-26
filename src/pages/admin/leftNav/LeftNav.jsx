@@ -18,10 +18,10 @@ class LeftNav extends Component {
                             <span>{item.title}</span>
                         </Link>
                     </Menu.Item>)
-            }else{
-                const childItem = item.children.find(item=>item.key.indexOf(path)===0)
-                if(childItem){
-                    this.openKey=item.key
+            } else {
+                const childItem = item.children.find(item => item.key.indexOf(path) === 0)
+                if (childItem) {
+                    this.openKey = item.key
                 }
                 return (
                     <SubMenu key={item.key} title={
@@ -37,7 +37,7 @@ class LeftNav extends Component {
         this.menuNodes = this.getMenuNodes(menuList)
     }
     render() {
-        const path = this.props.location.pathname
+        const path = this.props.location.pathname === '/products/update' ? '/products/manage' : this.props.location.pathname
         return (
             <div>
                 <div className='left-nav-head'>
