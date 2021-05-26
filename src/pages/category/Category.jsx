@@ -18,6 +18,7 @@ export default class Category extends Component {
         addOrUpdate: '',
         categoryId: ''
     }
+    //refs弃用，用这个新方法重置form中的值
     formRef = React.createRef()
     getCategory = async () => {
         const id = this.state.parentId
