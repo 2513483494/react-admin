@@ -3,10 +3,12 @@ import './index.less'
 import LinkButton from '../linkButton/LinkButton'
 import { withRouter } from 'react-router-dom'
 import formatTime from '../../utils/formatTime'
+import store from 'store'
 
 class ContentHead extends Component {
     state={
         currtime:formatTime(Date.now()),
+        title:''
     }
     getTime=()=>{
         this.id = setInterval(() => {
@@ -17,6 +19,7 @@ class ContentHead extends Component {
     logout=()=>{
         this.props.history.push('/login')
     }
+
     componentDidMount(){
         this.getTime()
     }
@@ -30,12 +33,12 @@ class ContentHead extends Component {
             <div className='main'>
                 <div className='top'>
                     <div className='topcontent'>
-                        <span>欢迎, admin</span>
+                        <span>欢迎, {store.get('userName')}</span>
                         <LinkButton onClick={this.logout}>退出</LinkButton>
                     </div>
                 </div>
                 <div className='bottom'>
-                    <span className='title'>首页</span>
+                    <span className='title'>{store.get('globalTitle')}</span>
                     <div className='bottomcontent'>
                         <span>{currtime}</span>
                     </div>

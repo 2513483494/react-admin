@@ -6,14 +6,17 @@ import {
     ArrowLeftOutlined
 } from '@ant-design/icons';
 import './index.less'
-import { reqCategorys } from '../../api/index'
+import { reqCategorys, reqAddCategory } from '../../api/index'
+import store from 'store'
+import pathName from '../../config/pathName'
 
 export default class Category extends Component {
     state = {
         dataSource: [],
         parentId: 0,
         parentName: '',
-        visible: false
+        visible: false,
+        categoryName:''
     }
     getCategory = async () => {
         const id = this.state.parentId
@@ -60,8 +63,13 @@ export default class Category extends Component {
         this.setState({ visible: true })
     }
 
-    handleOk = () => {
-        this.setState({ visible: true })
+    handleOk = async () => {
+        this.setState({ visible: false })
+        const result = await reqAddCategory(this.state.categoryName,0)
+        console.log(result)
+        if(result.status===0){
+            this.getCategory()
+        }
     }
 
     handleCancel = () => {
@@ -75,16 +83,24 @@ export default class Category extends Component {
     }
     onFinish = (values) => {
         console.log('Success:', values);
-      };
-    
+    };
+
     onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
-      };
+    };
+    handleChange = (e) => {
+        console.log(e.target.value)
+        const categoryName=e.target.value
+        this.setState({
+            categoryName
+        })
+    }
     componentWillMount() {
         this.initColumns()
     }
     componentDidMount() {
         this.getCategory()
+        store.set('globalTitle',pathName[this.props.location.pathname])
     }
 
     render() {
@@ -103,12 +119,12 @@ export default class Category extends Component {
         )
         const layout = {
             labelCol: {
-              span: 8,
+                span: 8,
             },
             wrapperCol: {
-              span: 16,
+                span: 16,
             },
-          };
+        };
 
         return (
             <Card title={title}>
@@ -116,7 +132,8 @@ export default class Category extends Component {
                     dataSource={dataSource}
                     columns={this.columns}
                     bordered
-                    rowKey='_id' />
+                    rowKey='_id' 
+                />
                 <Modal title="添加分类" visible={visible} onOk={this.handleOk} onCancel={this.handleCancel}>
                     <Form
                         {...layout}
@@ -137,7 +154,7 @@ export default class Category extends Component {
                                 },
                             ]}
                         >
-                            <Input />
+                            <Input onChange={(e) => this.handleChange(e)} />
                         </Form.Item>
                     </Form>
                 </Modal>

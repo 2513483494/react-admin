@@ -2,11 +2,16 @@ import React, { Component } from 'react'
 import { Steps, Timeline, Progress, TimePicker } from 'antd';
 import './index.less'
 import moment from 'moment'
+import pathName from '../../config/pathName'
+import store from 'store'
 
 const { Step } = Steps;
 const format = 'HH:mm'
 
 export default class Admin extends Component {
+    componentDidMount() {
+        store.set('globalTitle',pathName[this.props.location.pathname])
+    }
     render() {
         return (
             <div>

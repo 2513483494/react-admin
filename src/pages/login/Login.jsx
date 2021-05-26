@@ -3,6 +3,7 @@ import { Form, Input, Button } from 'antd'
 import Header from './header/Header'
 import './index.less'
 import { reqLogin } from '../../api/index'
+import store from 'store'
 
 const layout = {
     labelCol: {
@@ -22,6 +23,7 @@ const tailLayout = {
 export default class Login extends Component {
     onFinish = async(values) => {
         const result = await reqLogin(values.username,values.password)
+        store.set('userName',values.username)
         if(result.status===0){
             this.props.history.push('/admin')
         }

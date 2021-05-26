@@ -50,7 +50,7 @@ function Update(props) {
                     name="initMessage"
                     width='100px'
                 >
-                    <LinkButton onClick={() => props.history.goBack()}><ArrowLeftOutlined />返回商品列表</LinkButton>
+                    <LinkButton onClick={() => props.history.push('/products/manage')}><ArrowLeftOutlined />返回商品列表</LinkButton>
                     <span style={{ marginLeft: 80, color: 'pink' }}>
                         提示：您可以修改商品信息
                     </span>
