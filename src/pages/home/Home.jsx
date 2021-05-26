@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Steps, Timeline, Progress, TimePicker } from 'antd';
 import './index.less'
 import moment from 'moment'
+//主页随便写了写，等写完组件功能回头写主页
 
 const { Step } = Steps;
 const format = 'HH:mm'
@@ -33,7 +34,6 @@ export default class Admin extends Component {
                     </Steps>
                 </div>
             </div>
-
         )
     }
 }

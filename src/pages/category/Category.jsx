@@ -6,7 +6,7 @@ import {
     ArrowLeftOutlined
 } from '@ant-design/icons';
 import './index.less'
-import { reqCategorys, reqAddCategory } from '../../api/index'
+import { reqCategorys, reqAddCategory, reqUpdateCategory } from '../../api/index'
 
 export default class Category extends Component {
     state = {
@@ -14,19 +14,18 @@ export default class Category extends Component {
         parentId: 0,
         parentName: '',
         visible: false,
-        categoryName:''
+        categoryName: '',
+        addOrUpdate: '',
+        categoryId: ''
     }
     getCategory = async () => {
         const id = this.state.parentId
-        console.log('id', id)
         const result = await reqCategorys(id)
-        console.log('r', result)
         this.setState({
             dataSource: result.data
         })
     }
     showSubcat = (category) => {
-        console.log('id', category._id)
         this.setState({
             parentId: category._id,
             parentName: category.name
@@ -50,23 +49,32 @@ export default class Category extends Component {
                 width: 300,
                 render: (category) => (
                     <span>
-                        <LinkButton onClick={this.updateCategory}>修改分类</LinkButton>
+                        <LinkButton onClick={() => this.updateCategory(category)}>修改分类</LinkButton>
                         {this.state.parentId === 0 ? <LinkButton onClick={() => this.showSubcat(category)}>查看子分类</LinkButton> : null}
                     </span>
                 )
             }
         ]
     }
+
     showModal = () => {
         this.setState({ visible: true })
     }
 
     handleOk = async () => {
         this.setState({ visible: false })
-        const result = await reqAddCategory(this.state.categoryName,0)
-        console.log(result)
-        if(result.status===0){
-            this.getCategory()
+        if (this.state.addOrUpdate === 'add') {
+            const result = await reqAddCategory(this.state.categoryName, 0)
+            if (result.status === 0) {
+                this.getCategory()
+            }
+        } else if (this.state.addOrUpdate === 'update') {
+            const { categoryId, categoryName } = this.state
+            //注意此处传入的参数是对象形式
+            const result = await reqUpdateCategory({ categoryId, categoryName })
+            if (result.status === 0) {
+                this.getCategory()
+            }
         }
     }
 
@@ -75,9 +83,14 @@ export default class Category extends Component {
     }
     addCategory = () => {
         this.showModal()
+        this.setState({ addOrUpdate: 'add' })
+        this.setState({ categoryName: '' },() => this.refs.form.resetFields())
     }
-    updateCategory = () => {
+    updateCategory = async (category) => {
         this.showModal()
+        this.setState({ addOrUpdate: 'update' })
+        this.setState({ categoryId: category._id })
+        this.setState({ categoryName: category.name },() => this.refs.form.resetFields())
     }
     onFinish = (values) => {
         console.log('Success:', values);
@@ -87,8 +100,7 @@ export default class Category extends Component {
         console.log('Failed:', errorInfo);
     };
     handleChange = (e) => {
-        console.log(e.target.value)
-        const categoryName=e.target.value
+        const categoryName = e.target.value
         this.setState({
             categoryName
         })
@@ -129,15 +141,17 @@ export default class Category extends Component {
                     dataSource={dataSource}
                     columns={this.columns}
                     bordered
-                    rowKey='_id' 
+                    rowKey='_id'
                 />
-                <Modal title="添加分类" visible={visible} onOk={this.handleOk} onCancel={this.handleCancel}>
+                <Modal title={this.state.addOrUpdate === 'add' ? "添加分类" : '修改分类'} visible={visible} onOk={this.handleOk} onCancel={this.handleCancel}>
                     <Form
                         {...layout}
                         name="basic"
                         initialValues={{
                             remember: true,
+                            username: this.state.categoryName
                         }}
+                        ref='form'
                         onFinish={this.onFinish}
                         onFinishFailed={this.onFinishFailed}
                     >

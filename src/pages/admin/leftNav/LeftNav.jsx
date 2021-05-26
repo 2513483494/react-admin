@@ -4,6 +4,7 @@ import Logo from '../imgs/xjq.jpg'
 import menuList from '../../../config/menuConfig'
 import { Menu } from 'antd'
 import { Link, withRouter } from 'react-router-dom'
+//配置生成菜单
 
 const SubMenu = Menu.SubMenu;
 
@@ -19,10 +20,12 @@ class LeftNav extends Component {
                         </Link>
                     </Menu.Item>)
             } else {
+                //有子菜单则open设置为当前路径
                 const childItem = item.children.find(item => item.key.indexOf(path) === 0)
                 if (childItem) {
                     this.openKey = item.key
                 }
+                //递归生成菜单
                 return (
                     <SubMenu key={item.key} title={
                         <span>{item.title}</span>

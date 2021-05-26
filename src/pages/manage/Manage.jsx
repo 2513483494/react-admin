@@ -4,6 +4,7 @@ import { DownOutlined, UserOutlined, PlusOutlined } from '@ant-design/icons';
 import './index.less'
 import LinkButton from '../../components/linkButton/LinkButton'
 import { reqProducts, reqUpdateStatus, reqSearchProducts } from '../../api/index'
+//开始用函数组件,利用hooks状态管理
 
 const { Search } = Input;
 

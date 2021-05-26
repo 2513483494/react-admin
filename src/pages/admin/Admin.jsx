@@ -13,6 +13,7 @@ import LeftNav from './leftNav/LeftNav'
 import NotFound from '../notFound/NotFound'
 import ContentHead from '../../components/content-Head/ContentHead'
 import Update from '../update/Update'
+//主界面，配置路由
 
 const { Footer, Sider, Content } = Layout
 

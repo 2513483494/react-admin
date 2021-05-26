@@ -23,6 +23,7 @@ const tailLayout = {
 export default class Login extends Component {
     onFinish = async(values) => {
         const result = await reqLogin(values.username,values.password)
+        //用户名保存到localstorage中，虽然读取的慢但是只读一次影响不大
         store.set('userName',values.username)
         if(result.status===0){
             this.props.history.push('/home')
@@ -80,7 +81,6 @@ export default class Login extends Component {
                             </Button>
                         </Form.Item>
                     </Form>
-
                 </div>
             </div>
 

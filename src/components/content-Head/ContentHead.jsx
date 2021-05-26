@@ -18,6 +18,7 @@ class ContentHead extends Component {
         }, 1000);
     }
     logout = () => {
+        //需要清除登录信息，避免下次不用登录就可以访问，不过有没有这种需求有待考虑
         this.props.history.push('/login')
         store.clearAll()
     }
@@ -31,6 +32,7 @@ class ContentHead extends Component {
     render() {
         const { currtime } = this.state
         //通过地址与title的映射找到title
+        //注意不能写进didmount里，那样不会更新
         const title = pathName[this.props.location.pathname]
         return (
             <div className='main'>

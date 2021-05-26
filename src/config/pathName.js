@@ -1,3 +1,4 @@
+//更加方便的通过路径找到title
 const pathName ={
     '/home': '首页',
     '/products/category': '品类管理',

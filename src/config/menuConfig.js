@@ -1,3 +1,4 @@
+//生成菜单，或通过路径找到title
 const menuConfig = [
     {
         title: '首页', // 菜单标题名称
