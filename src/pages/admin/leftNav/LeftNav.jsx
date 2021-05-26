@@ -37,6 +37,7 @@ class LeftNav extends Component {
         this.menuNodes = this.getMenuNodes(menuList)
     }
     render() {
+        //如果是查看商品详情或者修改商品信息，则让商品管理菜单为被选择项
         const path = this.props.location.pathname === '/products/update' ? '/products/manage' : this.props.location.pathname
         return (
             <div>

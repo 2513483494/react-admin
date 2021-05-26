@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Input, Button } from 'antd'
+import { Form, Input, Button, message } from 'antd'
 import Header from './header/Header'
 import './index.less'
 import { reqLogin } from '../../api/index'
@@ -25,7 +25,10 @@ export default class Login extends Component {
         const result = await reqLogin(values.username,values.password)
         store.set('userName',values.username)
         if(result.status===0){
-            this.props.history.push('/admin')
+            this.props.history.push('/home')
+            message.success('登录成功！')
+        }else{
+            message.warning('用户名或密码错误，请重新登录！')
         }
     };
 

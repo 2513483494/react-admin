@@ -8,6 +8,7 @@ import pathName from '../../config/pathName'
 
 class ContentHead extends Component {
     state = {
+        //格式化当前时间
         currtime: formatTime(Date.now())
     }
     getTime = () => {
@@ -18,6 +19,7 @@ class ContentHead extends Component {
     }
     logout = () => {
         this.props.history.push('/login')
+        store.clearAll()
     }
     componentDidMount() {
         this.getTime()
@@ -28,6 +30,7 @@ class ContentHead extends Component {
     }
     render() {
         const { currtime } = this.state
+        //通过地址与title的映射找到title
         const title = pathName[this.props.location.pathname]
         return (
             <div className='main'>
