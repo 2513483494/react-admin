@@ -1,35 +1,46 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Table, Modal, Form, Input, Select } from 'antd'
+import { Button, Table, Modal, Form, Input, Select, message } from 'antd'
 import './index.less'
 import LinkButton from '../../components/linkButton/LinkButton'
-import { reqUsers } from '../../api/index'
+import { reqUsers, reqAddOrUpdateUser, reqDeleteUser } from '../../api/index'
 import formatTime from '../../utils/formatTime'
 
 const { Option } = Select
+const formRef = React.createRef()
 
-function User() {
+function User(props) {
     const [isModalVisible, setisModalVisible] = useState(false)
     const [users, setUsers] = useState([])
     const [roles, setRoles] = useState([])
     const [roleNames, setRoleNames] = useState([])
+    const [selectedRole, setSelectedRole] = useState('')
+    const [currentId, setCurrentId] = useState('')
 
     useEffect(() => {
-        async function f() {
-            const result = await reqUsers()
-            //console.log(result)
-            if (result.status === 0) {
-                const { users, roles } = result.data
-                setUsers(users)
-                setRoles(roles)
-                const roleNames = roles.reduce((pre, role) => {
-                    pre[role._id] = role.name
-                    return pre
-                }, {})
-                setRoleNames(roleNames)
-            }
+        getUsers()
+    }, [users])
+
+    const getUsers = async () => {
+        const result = await reqUsers()
+        if (result.status === 0) {
+            const { users, roles } = result.data
+            setUsers(users)
+            setRoles(roles)
+            const roleNames = roles.reduce((pre, role) => {
+                pre[role._id] = role.name
+                return pre
+            }, {})
+            setRoleNames(roleNames)
         }
-        f()
-    })
+    }
+
+    const delUser = async (user) => {
+        const id = user._id
+        const result = await reqDeleteUser(id)
+        if(result.status===0){
+            message.success('删除用户成功！')
+        }
+    }
 
     //该处dataIndex必须与后台数据key相同
     const columns = [
@@ -57,11 +68,10 @@ function User() {
         },
         {
             title: '操作',
-            render: () => (
+            render: (user) => (
                 <span>
-                    <LinkButton>修改</LinkButton>
-                    <LinkButton>删除</LinkButton>
-
+                    <LinkButton onClick={() => updateUser(user)}>修改</LinkButton>
+                    <LinkButton onClick={() => delUser(user)}>删除</LinkButton>
                 </span>
             )
         },
@@ -75,14 +85,11 @@ function User() {
         },
     }
 
-    const handleOk = () => {
-        setisModalVisible(false)
-    }
     const handleCancel = () => {
         setisModalVisible(false)
     }
     function handleChange(value) {
-        console.log(`selected ${value}`);
+        setSelectedRole(value)
     }
     const onFinish = (values) => {
         console.log('Success:', values)
@@ -94,13 +101,38 @@ function User() {
     const title = (
         <span>添加用户</span>
     )
-    const options = roles.map((value,index) => {
+    const options = roles.map((value, index) => {
         return <Option value={value.name} key={index}>{value.name}</Option>
     })
+    const addUser = () => {
+        setisModalVisible(true)
+        setCurrentId('')
+    }
+    const updateUser = (user) => {
+        setisModalVisible(true)
+        setCurrentId(user._id)
+    }
+    const handleOk = async () => {
+        setisModalVisible(false)
+        const form = formRef.current // 使用 getFieldsValue 获取多个字段值 
+        const values = form.getFieldsValue(['username', 'mail', 'phone'])
+        let role_id
+        for (let r in roleNames) {
+            if (roleNames[r] === selectedRole) {
+                role_id = r
+            }
+        }
+        const user = currentId === '' ? { role_id, ...values } : { _id: currentId, role_id, ...values }
+        const result = await reqAddOrUpdateUser(user)
+        const info = currentId === '' ? '添加用户成功！' : '更新用户信息成功！'
+        if (result.status === 0) {
+            message.success(info)
+        }
+    }
     return (
         <div>
             <div className='user-header'>
-                <Button type='primary' style={{ marginLeft: 20 }} onClick={() => setisModalVisible(true)}>创建用户</Button>
+                <Button type='primary' style={{ marginLeft: 20 }} onClick={() => addUser()}>创建用户</Button>
             </div>
             <Table
                 bordered
@@ -111,13 +143,18 @@ function User() {
                     {...layout}
                     name="basic"
                     initialValues={{
+                        name:'',
+                        mail:'',
+                        phone:'',
+                        role:''
                     }}
+                    ref={formRef}
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
                 >
                     <Form.Item
                         label="用户名"
-                        name="name"
+                        name="username"
                         rules={[{
                             required: true,
                             message: '请输入用户名!',
@@ -153,7 +190,7 @@ function User() {
                             message: '请输入角色!',
                         }]}
                     >
-                        <Select defaultValue="xjq" style={{ width: 120 }} onChange={handleChange}>
+                        <Select defaultValue="请选择角色" style={{ width: 120 }} onChange={handleChange}>
                             {options}
                         </Select>
                     </Form.Item>
