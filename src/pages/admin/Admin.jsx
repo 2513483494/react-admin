@@ -13,7 +13,6 @@ import LeftNav from './leftNav/LeftNav'
 import NotFound from '../notFound/NotFound'
 import ContentHead from '../../components/content-Head/ContentHead'
 import Update from '../update/Update'
-import UserUpdate from '../update/UserUpdate'
 //主界面，配置路由
 
 const { Footer, Sider, Content } = Layout
@@ -36,7 +35,6 @@ export default class Admin extends Component {
                             <Route exact path='/products/manage' component={Manage} />
                             <Route exact path='/products/update' component={Update} />
                             <Route path='/user' exact component={User} />
-                            <Route path='/user/update' component={UserUpdate} />
                             <Route path='/role' component={Role} />
                             <Route path="/charts/bar" component={Bar} />
                             <Route path="/charts/pie" component={Pie} />
