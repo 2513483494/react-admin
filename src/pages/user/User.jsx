@@ -15,14 +15,25 @@ function User(props) {
     const [roleNames, setRoleNames] = useState([])
     const [selectedRole, setSelectedRole] = useState('')
     const [currentId, setCurrentId] = useState('')
+    const [curruser, setcurruser] = useState({})
 
     useEffect(() => {
         getUsers()
-    }, [users])
+        const form = formRef.current // 使用 getFieldsValue 获取多个字段值 
+        if (form) {
+            form.setFieldsValue({
+                'username': curruser.username,
+                'mail': curruser.email,
+                'phone': curruser.phone,
+                'role': roleNames[curruser.role_id]
+            })
+        }
+    }, [curruser])
 
     const getUsers = async () => {
         const result = await reqUsers()
         if (result.status === 0) {
+            console.log('getuser')
             const { users, roles } = result.data
             setUsers(users)
             setRoles(roles)
@@ -37,7 +48,7 @@ function User(props) {
     const delUser = async (user) => {
         const id = user._id
         const result = await reqDeleteUser(id)
-        if(result.status===0){
+        if (result.status === 0) {
             message.success('删除用户成功！')
         }
     }
@@ -109,9 +120,11 @@ function User(props) {
         setCurrentId('')
     }
     const updateUser = (user) => {
+        setcurruser(user)
         setisModalVisible(true)
         setCurrentId(user._id)
     }
+
     const handleOk = async () => {
         setisModalVisible(false)
         const form = formRef.current // 使用 getFieldsValue 获取多个字段值 
@@ -128,6 +141,7 @@ function User(props) {
         if (result.status === 0) {
             message.success(info)
         }
+        getUsers()
     }
     return (
         <div>
@@ -143,10 +157,10 @@ function User(props) {
                     {...layout}
                     name="basic"
                     initialValues={{
-                        name:'',
-                        mail:'',
-                        phone:'',
-                        role:''
+                        name: '',
+                        mail: '',
+                        phone: '',
+                        role: ''
                     }}
                     ref={formRef}
                     onFinish={onFinish}
